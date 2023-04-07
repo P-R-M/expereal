@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 
@@ -11,6 +12,9 @@ import reportWebVitals from "./reportWebVitals";
 
 const firebaseConfig = {
   userProfile: "users",
+  profileParamsToPopulate: [
+    { child: 'role', root: 'roles' }, // populates user's role with matching role object from roles
+  ]
 };
 
 const rrfProps = {
@@ -23,7 +27,16 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <App />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />}>
+              <Route index element={<App />} />
+              {/* <Route path="blogs" element={<Blogs />} />
+              <Route path="contact" element={<Contact />} /> */}
+              {/* <Route path="*" element={<NoPage />} /> */}
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </ReactReduxFirebaseProvider>
     </Provider>
   </React.StrictMode>,
