@@ -1,44 +1,32 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { isLoaded, isEmpty } from "react-redux-firebase";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+// import { isLoaded, isEmpty } from "react-redux-firebase";
 import firebase from "../firebase";
 import { RootState } from "../store";
-// import { useHistory } from 'react-router-dom'; // if you use react-router
-// import GoogleButton from 'react-google-button' // optional
+import { LoginComp } from "ui";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  // const firebase = useFirebase()
   const auth = useSelector((state: RootState) => state.firebase.auth);
+  const navigation = useNavigate();
+
+  if(auth.uid) {
+    navigation("/dashboard")
+  }
 
   return (
     <div>
-      <StyledFirebaseAuth
-        uiConfig={{
-          signInFlow: "popup",
-          signInSuccessUrl: "/signedIn",
-          signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-          callbacks: {
-            signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-              // firebase.handleRedirectResult(authResult).then(() => {
-              //   // history.push(redirectUrl); if you use react router to redirect
-              // });
-              return false;
-            },
-          },
-        }}
-        firebaseAuth={firebase.auth()}
-      />
-      <div>
+      <LoginComp firebase={firebase} />
+      {/* <div>
         <h2>Auth</h2>
         {!isLoaded(auth) ? (
           <span>Loading...</span>
         ) : isEmpty(auth) ? (
-          <span>Not Authed</span>
+          <span>Not Authenticated</span>
         ) : (
           <pre>{JSON.stringify(auth, null, 2)}</pre>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
