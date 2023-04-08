@@ -5,16 +5,20 @@ import { Provider } from "react-redux";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 
 import "./index.css";
-import App from "./App";
+import Home from "./pages/Home";
 import { store } from "./store";
 import firebase from "./firebase";
 import reportWebVitals from "./reportWebVitals";
+import Login from "./pages/Login";
+import { NavBarComp } from "./components/NavBar";
+import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
 
 const firebaseConfig = {
   userProfile: "users",
   profileParamsToPopulate: [
-    { child: 'role', root: 'roles' }, // populates user's role with matching role object from roles
-  ]
+    { child: "role", root: "roles" }, // populates user's role with matching role object from roles
+  ],
 };
 
 const rrfProps = {
@@ -29,11 +33,11 @@ ReactDOM.render(
       <ReactReduxFirebaseProvider {...rrfProps}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<App />}>
-              <Route index element={<App />} />
-              {/* <Route path="blogs" element={<Blogs />} />
-              <Route path="contact" element={<Contact />} /> */}
-              {/* <Route path="*" element={<NoPage />} /> */}
+            <Route path="/" element={<NavBarComp />}>
+              <Route index element={<Home />} />
+              <Route path="login" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>
@@ -46,4 +50,4 @@ ReactDOM.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+reportWebVitals(console.log);

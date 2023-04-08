@@ -161,6 +161,12 @@ importers:
       react-firebaseui:
         specifier: ^6.0.0
         version: 6.0.0(firebase@9.19.1)(react@17.0.2)
+      react-router-dom:
+        specifier: ^6.10.0
+        version: 6.10.0(react-dom@17.0.2)(react@17.0.2)
+      tailwindcss:
+        specifier: ^3.3.1
+        version: 3.3.1(postcss@8.4.19)
     devDependencies:
       '@types/react':
         specifier: ^17.0.13
@@ -182,7 +188,7 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^5.10.1
-        version: 5.12.9(typescript@4.9.3)
+        version: 5.12.9(postcss@8.4.19)(typescript@4.9.3)
       typescript:
         specifier: ^4.5.3
         version: 4.9.3
@@ -10326,7 +10332,7 @@ packages:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
     dev: false
 
-  /tsup@5.12.9(typescript@4.9.3):
+  /tsup@5.12.9(postcss@8.4.19)(typescript@4.9.3):
     resolution: {integrity: sha512-dUpuouWZYe40lLufo64qEhDpIDsWhRbr2expv5dHEMjwqeKJS2aXA/FPqs1dxO4T6mBojo7rvo3jP9NNzaKyDg==}
     hasBin: true
     peerDependencies:
@@ -10349,6 +10355,7 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
+      postcss: 8.4.19
       postcss-load-config: 3.1.4(postcss@8.4.19)
       resolve-from: 5.0.0
       rollup: 2.79.1
