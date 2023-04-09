@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { isLoaded, useFirebase } from "react-redux-firebase";
+import { useFirebase } from "react-redux-firebase";
 
 // import {NavBar} from "ui";
 import { RootState } from "../store";
@@ -21,7 +21,7 @@ export const NavBarComp = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       <nav className="border-gray-200 mt-10">
         <div className="container mx-auto flex flex-wrap items-center justify-between">
           <Link to="#" className="flex">
@@ -93,7 +93,7 @@ export const NavBarComp = () => {
 
           <div className="hidden md:block w-full md:w-auto" id="mobile-menu">
             <ul className="flex-col md:flex-row flex md:space-x-8 mt-4 md:mt-0 md:text-sm md:font-medium">
-              {isLoaded(auth) ? (
+              {!!auth?.uid ? (
                 <>
                   <li>
                     <button
