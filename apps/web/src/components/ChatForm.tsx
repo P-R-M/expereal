@@ -1,6 +1,6 @@
 import React from "react";
 
-function Home() {
+function ChatForm() {
   return (
     <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
       <div>
@@ -70,4 +70,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default ChatForm;

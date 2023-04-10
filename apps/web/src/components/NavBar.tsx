@@ -1,24 +1,24 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { useFirebase } from "react-redux-firebase";
-
-// import {NavBar} from "ui";
-import { RootState } from "../store";
+// 
 import { Link, Outlet } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+
+import {auth} from "../firebase";
 
 export const NavBarComp = () => {
   const [dropdown, setDropdown] = React.useState(false);
-  const auth = useSelector((state: RootState) => state.firebase.auth);
-  const firebase = useFirebase();
+  const [user] = useAuthState(auth);
 
   const handleLogout = (ev: React.MouseEvent<HTMLAnchorElement>) => {
-    ev.preventDefault()
-    firebase.logout();
+    ev.preventDefault();
+    if(!!auth.currentUser) {
+        auth.signOut();
+    }
   };
 
   const handleDropdown = () => {
     setDropdown(!dropdown);
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -54,7 +54,7 @@ export const NavBarComp = () => {
               </defs>
             </svg>
             <span className="self-center text-lg font-semibold whitespace-nowrap">
-              Experial
+              ExpeReal
             </span>
           </Link>
           <button
@@ -93,7 +93,7 @@ export const NavBarComp = () => {
 
           <div className="hidden md:block w-full md:w-auto" id="mobile-menu">
             <ul className="flex-col md:flex-row flex md:space-x-8 mt-4 md:mt-0 md:text-sm md:font-medium">
-              {!!auth?.uid ? (
+              {!!user ? (
                 <>
                   <li>
                     <button
@@ -102,7 +102,7 @@ export const NavBarComp = () => {
                       className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0 font-medium flex items-center justify-between w-full md:w-auto"
                       onClick={handleDropdown}
                     >
-                      {auth?.displayName + " "}
+                      {user?.displayName + " "}
                       <svg
                         className="w-4 h-4 ml-1"
                         fill="currentColor"
@@ -118,7 +118,9 @@ export const NavBarComp = () => {
                     </button>
                     <div
                       id="dropdownNavbar"
-                      className={`${dropdown ? "inline" : "hidden"} bg-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4 w-44`}
+                      className={`${
+                        dropdown ? "flex" : "hidden"
+                      } bg-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4 w-44`}
                     >
                       <ul
                         className="py-1"
@@ -129,23 +131,7 @@ export const NavBarComp = () => {
                             to="#"
                             className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                           >
-                            Dashboard
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="#"
-                            className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-                          >
-                            Settings
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="#"
-                            className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-                          >
-                            Earnings
+                            Profile
                           </Link>
                         </li>
                       </ul>
@@ -202,7 +188,7 @@ export const NavBarComp = () => {
           </div>
         </div>
       </nav>
-      
+
       <Outlet />
     </div>
   );

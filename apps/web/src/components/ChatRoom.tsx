@@ -1,6 +1,6 @@
 import React from "react";
 
-function Home() {
+function ChatRoom() {
   return (
     <div className="flex flex-col overflow-x-auto">
       <div className="flex flex-col">
@@ -161,4 +161,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default ChatRoom;
