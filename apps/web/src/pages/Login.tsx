@@ -1,32 +1,22 @@
 import React from "react";
-import { useSelector } from "react-redux";
-// import { isLoaded, isEmpty } from "react-redux-firebase";
-import firebase from "../firebase";
-import { RootState } from "../store";
-import { LoginComp } from "ui";
 import { useNavigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+
+import { GoogleAuthProvider } from "firebase/auth";
+import { LoginComp } from "ui";
+import { auth } from "../firebase";
 
 function LoginPage() {
-  const auth = useSelector((state: RootState) => state.firebase.auth);
+  const [user] = useAuthState(auth);
   const navigation = useNavigate();
 
-  if(auth.uid) {
-    navigation("/dashboard")
+  if (!!user) {
+    navigation("/dashboard");
   }
 
   return (
     <div>
-      <LoginComp firebase={firebase} />
-      {/* <div>
-        <h2>Auth</h2>
-        {!isLoaded(auth) ? (
-          <span>Loading...</span>
-        ) : isEmpty(auth) ? (
-          <span>Not Authenticated</span>
-        ) : (
-          <pre>{JSON.stringify(auth, null, 2)}</pre>
-        )}
-      </div> */}
+      <LoginComp googleAuthProvider={GoogleAuthProvider} auth={auth} />
     </div>
   );
 }

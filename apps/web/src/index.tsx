@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import { NavBarComp } from "./components/NavBar";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import PrivateOutlet from "./routes";
 
 const firebaseConfig = {
   userProfile: "users",
@@ -36,7 +37,9 @@ ReactDOM.render(
             <Route path="/" element={<NavBarComp />}>
               <Route index element={<Home />} />
               <Route path="login" element={<Login />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<PrivateOutlet />}>
+                <Route index element={<Dashboard />} />
+              </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

@@ -2,29 +2,28 @@ import React from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
 type LoginProps = {
-  firebase: any
-}
+  // tslint:disable-next-line:no-any
+  googleAuthProvider: any;
+  // tslint:disable-next-line:no-any
+  auth: any;
+};
 
-export const LoginComp = ({  firebase }: LoginProps) => {
-
+export const LoginComp = ({ googleAuthProvider, auth }: LoginProps) => {
   return (
     <div>
       <StyledFirebaseAuth
         uiConfig={{
           signInFlow: "popup",
           signInSuccessUrl: "/signedIn",
-          signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+          signInOptions: [googleAuthProvider.PROVIDER_ID],
           callbacks: {
-            signInSuccessWithAuthResult: (_authResult, _redirectUrl) => {
-              // firebase.handleRedirectResult(authResult).then(() => {
-              //   // history.push(redirectUrl); if you use react router to redirect
-              // });
+            signInSuccessWithAuthResult: () => {
               return false;
             },
           },
         }}
-        firebaseAuth={firebase.auth()}
+        firebaseAuth={auth}
       />
     </div>
   );
-}
+};
