@@ -1,8 +1,37 @@
 import React from "react";
+import { CollectionReference, DocumentData, serverTimestamp, addDoc } from "firebase/firestore";
+import { auth } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
-function ChatForm() {
+type ChatFormProps = {
+  dummy: React.RefObject<HTMLSpanElement>,
+  collRef: CollectionReference<DocumentData>
+}
+
+function ChatForm({ dummy, collRef }: ChatFormProps) {
+  const [user] = useAuthState(auth);
+  const [formValue, setFormValue] = React.useState('');
+
+  const sendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    
+    const uid = user?.uid;
+    const initials = user!.displayName;
+
+    await addDoc(collRef, {
+      text: formValue,
+      createdAt: serverTimestamp(),
+      uid,
+      initials: initials?.at(0)
+    })
+
+    setFormValue('');
+    dummy.current?.scrollIntoView({ behavior: 'smooth' });
+  }
+
   return (
-    <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
+    <form onSubmit={sendMessage} className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
       <div>
         <button className="flex items-center justify-center text-gray-400 hover:text-gray-600">
           <svg
@@ -13,9 +42,9 @@ function ChatForm() {
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
             ></path>
           </svg>
@@ -26,6 +55,8 @@ function ChatForm() {
           <input
             type="text"
             className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+            value={formValue}
+            onChange={(e) => setFormValue(e.target.value)}
           />
           <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
             <svg
@@ -46,7 +77,10 @@ function ChatForm() {
         </div>
       </div>
       <div className="ml-4">
-        <button className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0">
+        <button
+          className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
+          disabled={!formValue}
+        >
           <span>Send</span>
           <span className="ml-2">
             <svg
@@ -66,7 +100,7 @@ function ChatForm() {
           </span>
         </button>
       </div>
-    </div>
+    </form>
   );
 }
 
