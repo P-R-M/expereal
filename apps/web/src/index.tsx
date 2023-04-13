@@ -15,6 +15,11 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import PrivateOutlet from "./routes";
 
+// Firebase => Backend as a service
+// ReactJS => Single page application
+// npm => node package manager
+// tailwindCss
+
 const firebaseConfig = {
   userProfile: "users",
   profileParamsToPopulate: [

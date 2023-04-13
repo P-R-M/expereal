@@ -16,7 +16,7 @@ function LoginPage() {
 
   return (
     <div>
-      <LoginComp googleAuthProvider={GoogleAuthProvider} auth={auth} />
+      <LoginComp googleAuthProvider={GoogleAuthProvider} auth={auth} log={console.log} />
     </div>
   );
 }
