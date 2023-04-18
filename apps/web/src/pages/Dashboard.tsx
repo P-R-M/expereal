@@ -5,7 +5,7 @@ import Recipients from "../components/Recipients";
 import ChatProfile from "../components/ChatProfile";
 import { collection, query, orderBy, limit } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { firestore as db} from "../firebase";
+import { db} from "../firebase";
 
 // https://tailwindcomponents.com/component/quickchat-chat-layout
 
