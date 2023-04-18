@@ -14,8 +14,7 @@ import { NavBarComp } from "./components/NavBar";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import PrivateOutlet from "./routes";
-import SearchModel from "./components/SearchModel";
-import GroupModel from "./components/GroupModel";
+import RegisterPage from "./pages/Register";
 
 // Firebase => Backend as a service
 // ReactJS => Single page application
@@ -44,10 +43,9 @@ ReactDOM.render(
             <Route path="/" element={<NavBarComp />}>
               <Route index element={<Home />} />
               <Route path="login" element={<Login />} />
+              <Route path="register" element={<RegisterPage />} />
               <Route path="/dashboard" element={<PrivateOutlet />}>
                 <Route index element={<Dashboard />} />
-                <Route path="private" element={<SearchModel />} />
-                <Route path="group" element={<GroupModel />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
