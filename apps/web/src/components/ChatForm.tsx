@@ -1,5 +1,5 @@
 import React from "react";
-import { CollectionReference, DocumentData, serverTimestamp, addDoc } from "firebase/firestore";
+import { CollectionReference, DocumentData, Timestamp, addDoc } from "firebase/firestore";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -21,7 +21,7 @@ function ChatForm({ dummy, collRef }: ChatFormProps) {
 
     await addDoc(collRef, {
       text: formValue,
-      createdAt: serverTimestamp(),
+      createdAt: Timestamp.now(),
       uid,
       initials: initials?.at(0)
     })
