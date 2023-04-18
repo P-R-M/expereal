@@ -102,7 +102,7 @@ export const NavBarComp = () => {
                       className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0 font-medium flex items-center justify-between w-full md:w-auto"
                       onClick={handleDropdown}
                     >
-                      {user?.displayName + " "}
+                      {(user?.displayName ? user?.displayName : "Settings") + " "}
                       <svg
                         className="w-4 h-4 ml-1"
                         fill="currentColor"
@@ -168,10 +168,10 @@ export const NavBarComp = () => {
                   </li>
                   <li>
                     <Link
-                      to="#"
+                      to="/register"
                       className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
                     >
-                      Contact
+                      Register
                     </Link>
                   </li>
                   <li>
