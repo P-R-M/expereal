@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { Timestamp, doc, setDoc } from "firebase/firestore";
 
-import { LoginComp } from "ui";
 import { auth, db } from "../firebase";
 import useInput from "../hooks/useInput";
 
@@ -25,7 +23,8 @@ function RegisterPage() {
         const user = userInfo.user;
         await setDoc(doc(db, "profile", user.uid), {
           role: "Patron",
-          uid: user.uid,
+          uid: `${user.uid}`,
+          displayName: user.email?.split("@"),
           created_at: Timestamp.now()
         });
         navigation("/dashboard");
@@ -76,7 +75,7 @@ function RegisterPage() {
               Register an account
             </h2>
           </div>
-          {error && <>{error}</>}
+          {error && <span className="text-center text-red-800">{error}</span>}
           <form className="mt-8 space-y-6" onSubmit={registerWithEmailPassword}>
             <input type="hidden" name="remember" value="true" />
             <div className="-space-y-px rounded-md shadow-sm">
@@ -149,11 +148,11 @@ function RegisterPage() {
         </div>
       </div>
 
-      <LoginComp
+      {/* <LoginComp
         googleAuthProvider={GoogleAuthProvider}
         auth={auth}
         log={console.log}
-      />
+      /> */}
     </div>
   );
 }

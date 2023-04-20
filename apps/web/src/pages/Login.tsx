@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
-import { LoginComp } from "ui";
+// import { LoginComp } from "ui";
 import { auth } from "../firebase";
 import useInput from "../hooks/useInput";
 
@@ -66,7 +66,7 @@ function LoginPage() {
               Sign in to your account
             </h2>
           </div>
-          {error && <>{error}</>}
+          {error && <span className="text-center text-red-700">{error}</span>}
           <form className="mt-8 space-y-6" onSubmit={loginWithEmailPassword}>
             <input type="hidden" name="remember" value="true" />
             <div className="-space-y-px rounded-md shadow-sm">
@@ -148,11 +148,11 @@ function LoginPage() {
         </div>
       </div>
 
-      <LoginComp
+      {/* <LoginComp
         googleAuthProvider={GoogleAuthProvider}
         auth={auth}
         log={console.log}
-      />
+      /> */}
     </div>
   );
 }
