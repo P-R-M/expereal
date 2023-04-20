@@ -1,18 +1,23 @@
 import React from "react";
-// 
+//
 import { Link, Outlet } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import {auth} from "../firebase";
+import { auth, db } from "../firebase";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { doc } from "firebase/firestore";
 
 export const NavBarComp = () => {
   const [dropdown, setDropdown] = React.useState(false);
   const [user] = useAuthState(auth);
 
+  const docRef = doc(db, "profile", `${user?.uid}`);
+  const [prof] = useDocumentData(docRef);
+
   const handleLogout = (ev: React.MouseEvent<HTMLAnchorElement>) => {
     ev.preventDefault();
-    if(!!auth.currentUser) {
-        auth.signOut();
+    if (!!auth.currentUser) {
+      auth.signOut();
     }
   };
 
@@ -96,13 +101,22 @@ export const NavBarComp = () => {
               {!!user ? (
                 <>
                   <li>
+                    <Link
+                      to="/dashboard"
+                      className="bg-blue-700 md:bg-transparent text-white block pl-3 pr-4 py-2 md:text-blue-700 md:p-0 rounded focus:outline-none"
+                      aria-current="page"
+                    >
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li>
                     <button
                       id="dropdownNavbarLink"
                       data-dropdown-toggle="dropdownNavbar"
                       className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0 font-medium flex items-center justify-between w-full md:w-auto"
                       onClick={handleDropdown}
                     >
-                      {(user?.displayName ? user?.displayName : "Settings") + " "}
+                      {prof?.displayName}
                       <svg
                         className="w-4 h-4 ml-1"
                         fill="currentColor"
@@ -128,7 +142,7 @@ export const NavBarComp = () => {
                       >
                         <li>
                           <Link
-                            to="#"
+                            to={`/dashboard/profile?q=${user.uid}`}
                             className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                           >
                             Profile
@@ -156,14 +170,6 @@ export const NavBarComp = () => {
                       aria-current="page"
                     >
                       Home
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="#"
-                      className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
-                    >
-                      About
                     </Link>
                   </li>
                   <li>
