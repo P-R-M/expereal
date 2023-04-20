@@ -1,10 +1,37 @@
 import React from "react";
 import useInput from "../hooks/useInput";
+import { Timestamp, addDoc, collection, doc } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db } from "../firebase";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
-const GroupModel = (props: { open: boolean }) => {
-  const { open } = props;
+const GroupModel = (props: { open: boolean; handleToggle: () => void }) => {
+  const { open, handleToggle } = props;
+
   const groupName = useInput("");
   const initials = useInput("");
+  const [user] = useAuthState(auth);
+
+  const docRef = doc(db, "profile", user!.uid);
+  const [prof] = useDocumentData(docRef);
+
+  const groupRef = collection(db, `groupChats`);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const uid = user?.uid;
+
+    await addDoc(groupRef, {
+      name: groupName.value,
+      initials: initials.value,
+      advisor: prof?.displayName,
+      patrons: [uid],
+      createdAt: Timestamp.now(),
+    });
+
+    handleToggle();
+  };
 
   return (
     <div
@@ -17,10 +44,10 @@ const GroupModel = (props: { open: boolean }) => {
 
       <div className="fixed inset-0 z-10 overflow-y-auto">
         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8">
             <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <div>
+                <div className="mt-3 text-center">
                   <h3
                     className="text-base font-semibold leading-6 text-gray-900"
                     id="modal-title"
@@ -28,9 +55,9 @@ const GroupModel = (props: { open: boolean }) => {
                     Create a group chat
                   </h3>
                   <div className="mt-2">
-                    <form className="mt-8 space-y-6">
+                    <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                       <input type="hidden" name="remember" value="true" />
-                      <div className="-space-y-px rounded-md shadow-sm">
+                      <div className="-space-y-px w-full rounded-md shadow-sm">
                         <div>
                           <label htmlFor="group_name" className="sr-only">
                             Group name
