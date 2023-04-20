@@ -1,5 +1,14 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { collection, query, orderBy, limit, doc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  doc,
+  getDocs,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from "firebase/firestore";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
@@ -21,7 +30,7 @@ const GroupChats = ({ setUID, setCollName }: ChatsProps) => {
   const [snapshot, loading, error] = useCollection(q);
 
   const docRef = doc(db, "profile", user!.uid);
-  const [prof, loadingProf] = useDocumentData(docRef);
+  const [prof] = useDocumentData(docRef);
 
   const handleToggle = () => {
     setToggle(!toggle);
@@ -34,10 +43,12 @@ const GroupChats = ({ setUID, setCollName }: ChatsProps) => {
         <div className="flex flex-row items-center">
           <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">
             {snapshot !== undefined && snapshot.docs !== undefined
-              ? snapshot.docs.filter(d => d.data().patrons.includes(user?.uid)).length
+              ? snapshot.docs.filter((d) =>
+                  d.data().patrons.includes(user?.uid)
+                ).length
               : 0}
           </span>
-          {!!loadingProf && prof?.role === "Advisor" && (
+          {prof?.role === "Advisor" && (
             <span
               onClick={handleToggle}
               className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full ml-5 hover:bg-gray-500 hover:cursor-pointer"
@@ -92,7 +103,7 @@ const GroupChats = ({ setUID, setCollName }: ChatsProps) => {
         </span>
       )}
 
-      <GroupModel open={toggle} />
+      <GroupModel open={toggle} handleToggle={handleToggle} />
     </>
   );
 };
@@ -101,7 +112,9 @@ const PrivateChats = ({ setUID, setCollName }: ChatsProps) => {
   // read from private chats collection
   const [user] = useAuthState(auth);
   const [toggleOpen, setToggleOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [searchQ, setSearchQ] = React.useState("");
+  const [queryResults, setQueryResult] =
+    React.useState<QueryDocumentSnapshot<DocumentData>[]>();
 
   const chatRef = collection(db, "privateChats");
   const q = query(chatRef, limit(25));
@@ -110,12 +123,46 @@ const PrivateChats = ({ setUID, setCollName }: ChatsProps) => {
   const docRef = doc(db, "profile", user!.uid);
   const [prof] = useDocumentData(docRef);
 
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const chatRef = collection(db, "profile");
+    const q = query(chatRef);
+
+    const querySnapshot = await getDocs(q);
+
+    setQueryResult(
+      querySnapshot.docs.filter((doc_) => {
+        return (
+          (doc_.data()?.firstName as string)
+            ?.toLowerCase()
+            ?.includes(searchQ.toLowerCase()) ||
+          (doc_.data()?.lastName as string)
+            ?.toLowerCase()
+            ?.includes(searchQ.toLowerCase()) ||
+          (doc_.data()?.displayName as string)
+            ?.toLowerCase()
+            ?.includes(searchQ.toLowerCase()) ||
+          (doc_.data()?.summary as string)
+            ?.toLowerCase()
+            ?.includes(searchQ.toLowerCase()) ||
+          (doc_.data()?.title as string)
+            ?.toLowerCase()
+            ?.includes(searchQ.toLowerCase()) ||
+          (doc_.data()?.university as string)
+            ?.toLowerCase()
+            ?.includes(searchQ.toLowerCase())
+        );
+      })
+    );
+  };
+
   const handleSearchToggle = () => {
     setToggleOpen(!toggleOpen);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+    setSearchQ(event.target.value);
   };
 
   return (
@@ -190,7 +237,16 @@ const PrivateChats = ({ setUID, setCollName }: ChatsProps) => {
           </span>
         )}
 
-        <SearchModel open={toggleOpen} handleToggle={handleSearchToggle} value={value} handleChange={handleChange} />
+        {
+          <SearchModel
+            open={toggleOpen}
+            handleToggle={handleSearchToggle}
+            value={searchQ}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            queryResults={queryResults}
+          />
+        }
       </div>
     </>
   );
