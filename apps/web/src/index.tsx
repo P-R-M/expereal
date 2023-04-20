@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import PrivateOutlet from "./routes";
 import RegisterPage from "./pages/Register";
+import Profile from "./pages/Profile";
 
 // Firebase => Backend as a service
 // ReactJS => Single page application
@@ -46,6 +47,7 @@ ReactDOM.render(
               <Route path="register" element={<RegisterPage />} />
               <Route path="/dashboard" element={<PrivateOutlet />}>
                 <Route index element={<Dashboard />} />
+                <Route path="profile" element={<Profile />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
