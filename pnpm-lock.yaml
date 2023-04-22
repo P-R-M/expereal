@@ -105,6 +105,9 @@ importers:
         specifier: ^2.1.2
         version: 2.1.4
     devDependencies:
+      '@tailwindcss/forms':
+        specifier: ^0.5.3
+        version: 0.5.3(tailwindcss@3.3.1)
       '@testing-library/jest-dom':
         specifier: ^5.16.1
         version: 5.16.5
@@ -2883,6 +2886,18 @@ packages:
       - supports-color
     dev: false
 
+<<<<<<< HEAD
+=======
+  /@tailwindcss/forms@0.5.3(tailwindcss@3.3.1):
+    resolution: {integrity: sha512-y5mb86JUoiUgBjY/o6FJSFZSEttfb3Q5gllE4xoKjAAD+vBrnIhE4dViwUuow3va8mpH4s9jyUbUbrRGoRdc2Q==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
+    dependencies:
+      mini-svg-data-uri: 1.4.4
+      tailwindcss: 3.3.1(postcss@8.4.19)
+    dev: true
+
+>>>>>>> 8e4b6bbb8b9ac5540b298bc43dcdc633c89e76f5
   /@testing-library/dom@8.19.0:
     resolution: {integrity: sha512-6YWYPPpxG3e/xOo6HIWwB/58HukkwIVTOaZ0VwdMVjhRUX/01E4FtQbck9GazOOj7MXHc5RBzMrU86iBJHbI+A==}
     engines: {node: '>=12'}
@@ -7673,6 +7688,14 @@ packages:
       webpack: 5.75.0
     dev: false
 
+<<<<<<< HEAD
+=======
+  /mini-svg-data-uri@1.4.4:
+    resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
+    hasBin: true
+    dev: true
+
+>>>>>>> 8e4b6bbb8b9ac5540b298bc43dcdc633c89e76f5
   /minimalistic-assert@1.0.1:
     resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
     dev: false

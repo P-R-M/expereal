@@ -6,9 +6,12 @@ type LoginProps = {
   googleAuthProvider: any;
   // tslint:disable-next-line:no-any
   auth: any;
+  // tslint:disable-next-line:no-any
+  log: (...data: any[]) => void;
 };
 
-export const LoginComp = ({ googleAuthProvider, auth }: LoginProps) => {
+export const LoginComp = ({ googleAuthProvider, auth, log }: LoginProps) => {
+
   return (
     <div>
       <StyledFirebaseAuth
@@ -17,7 +20,8 @@ export const LoginComp = ({ googleAuthProvider, auth }: LoginProps) => {
           signInSuccessUrl: "/signedIn",
           signInOptions: [googleAuthProvider.PROVIDER_ID],
           callbacks: {
-            signInSuccessWithAuthResult: () => {
+            signInSuccessWithAuthResult: (_authResult, redirectUrl) => {
+              log(_authResult, redirectUrl);
               return false;
             },
           },

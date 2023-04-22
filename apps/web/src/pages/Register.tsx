@@ -1,23 +1,32 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { Timestamp, doc, setDoc } from "firebase/firestore";
 
-// import { LoginComp } from "ui";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import useInput from "../hooks/useInput";
 
-function LoginPage() {
+function RegisterPage() {
   const email = useInput("");
   const password = useInput("");
   const [error, setError] = useState("");
   const [user] = useAuthState(auth);
   const navigation = useNavigate();
 
-  const loginWithEmailPassword = async (event: React.FormEvent) => {
+  const registerWithEmailPassword = async (event: React.FormEvent) => {
     event.preventDefault();
-    await signInWithEmailAndPassword(auth, email.value, password.value)
-      .then(() => {
+    await createUserWithEmailAndPassword(auth, email.value, password.value)
+      .then(async(userInfo) => {
+        const user = userInfo.user;
+        await setDoc(doc(db, "profile", user.uid), {
+          role: "Patron",
+          uid: `${user.uid}`,
+          displayName: user.email?.split("@"),
+          created_at: Timestamp.now()
+        });
         navigation("/dashboard");
       })
       .catch((error) => {
@@ -63,11 +72,11 @@ function LoginPage() {
               </defs>
             </svg>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-              Sign in to your account
+              Register an account
             </h2>
           </div>
-          {error && <span className="text-center text-red-700">{error}</span>}
-          <form className="mt-8 space-y-6" onSubmit={loginWithEmailPassword}>
+          {error && <span className="text-center text-red-800">{error}</span>}
+          <form className="mt-8 space-y-6" onSubmit={registerWithEmailPassword}>
             <input type="hidden" name="remember" value="true" />
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
@@ -102,22 +111,13 @@ function LoginPage() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Link
-                  to="/register"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Register here
-                </Link>
-              </div>
-
+            <div className="flex items-center justify-end">
               <div className="text-sm">
                 <Link
-                  to="#"
+                  to="/login"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  Forgot your password?
+                  Login here
                 </Link>
               </div>
             </div>
@@ -135,13 +135,13 @@ function LoginPage() {
                     aria-hidden="true"
                   >
                     <path
-                      fillRule="evenodd"
+                      fill-rule="evenodd"
                       d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
-                      clipRule="evenodd"
+                      clip-rule="evenodd"
                     />
                   </svg>
                 </span>
-                Sign in
+                Register
               </button>
             </div>
           </form>
@@ -157,4 +157,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default RegisterPage;
