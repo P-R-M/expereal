@@ -25,4 +25,3 @@ const ChatProfile = () => {
 };
 
 export default ChatProfile;
-
